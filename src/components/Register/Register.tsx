@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiOutlineLock, AiOutlineMail, AiOutlineUser } from "react-icons/ai";
 
@@ -11,6 +12,10 @@ interface FormType {
 }
 
 const Register = () => {
+  const searchParams = useSearchParams();
+  const from = searchParams.get("redirectURL");
+  const { replace } = useRouter();
+
   const {
     handleSubmit,
     register,
@@ -18,11 +23,17 @@ const Register = () => {
   } = useForm<FormType>();
 
   const handleAuth = async (data: FormType) => {
-    await fetch("http://localhost:5000/api/users/register", {
+    const res = await fetch("http://localhost:5000/api/users/register", {
       method: "POST",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
     });
+
+    if (res.ok && from) {
+      if (from) {
+        replace(`${from}`);
+      }
+    }
   };
 
   return (

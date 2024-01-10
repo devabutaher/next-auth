@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { replace } = useRouter();
 
   const links = [
     { name: "Home", href: "/" },
-    { name: "User", href: "/user" },
     { name: "Login", href: "/login" },
     { name: "Register", href: "/register" },
+    { name: "Profile", href: "/profile" },
     { name: "Dashboard", href: "/dashboard" },
   ];
 
@@ -19,6 +20,8 @@ const Navbar = () => {
       method: "POST",
       credentials: "include",
     });
+
+    replace("/login");
   };
 
   return (

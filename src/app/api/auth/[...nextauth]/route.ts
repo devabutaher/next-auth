@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 
 export const authOptions = {
-  // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -27,11 +26,9 @@ export const authOptions = {
 
         console.log("user:", user);
 
-        // If no error and we have user data, return it
         if (res.ok && user) {
           return user;
         }
-        // Return null if user data could not be retrieved
         return null;
       },
     }),
@@ -40,7 +37,6 @@ export const authOptions = {
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
     }),
-    // ...add more providers here
   ],
 };
 

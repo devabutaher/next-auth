@@ -2,10 +2,23 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export const middleware = async (request: NextRequest) => {
+  const { pathname } = request.nextUrl;
+
   try {
     const token = request.cookies.get("token")?.value;
+
+    if (!token) {
+      throw new Error("Invalid token");
+    }
+
     return NextResponse.next();
   } catch (error) {
-    console.error(error);
+    return NextResponse.redirect(
+      new URL(`/login?redirectURL=${pathname}`, request.url)
+    );
   }
+};
+
+export const config = {
+  matcher: ["/profile", "/dashboard/:path*"],
 };
