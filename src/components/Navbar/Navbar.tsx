@@ -8,10 +8,20 @@ const Navbar = () => {
 
   const links = [
     { name: "Home", href: "/" },
+    { name: "User", href: "/user" },
     { name: "Login", href: "/login" },
     { name: "Register", href: "/register" },
     { name: "Dashboard", href: "/dashboard" },
   ];
+
+  const handleLogout = async () => {
+    const res = await fetch("http://localhost:5000/api/users/logout", {
+      method: "POST",
+    });
+    const user = await res.json();
+
+    console.log("user:", user);
+  };
 
   return (
     <nav className="bg-gray-950 p-6 flex items-center justify-center gap-6">
@@ -26,6 +36,9 @@ const Navbar = () => {
           {link.name}
         </Link>
       ))}
+      <button className="link-style" onClick={handleLogout}>
+        Logout
+      </button>
     </nav>
   );
 };

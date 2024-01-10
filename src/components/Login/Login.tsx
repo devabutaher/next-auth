@@ -16,8 +16,15 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormType>();
 
-  const handleAuth = (data: FormType) => {
-    const { email, password } = data;
+  const handleAuth = async (data: FormType) => {
+    const res = await fetch("http://localhost:5000/api/users/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    });
+    const user = await res.json();
+
+    console.log("user:", user);
   };
 
   return (

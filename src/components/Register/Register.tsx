@@ -18,7 +18,14 @@ const Register = () => {
   } = useForm<FormType>();
 
   const handleAuth = async (data: FormType) => {
-    const { name, email, password } = data;
+    const res = await fetch("http://localhost:5000/api/users/register", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    });
+    const user = await res.json();
+
+    console.log("user:", user);
   };
 
   return (
