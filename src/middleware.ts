@@ -5,7 +5,7 @@ export const middleware = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
   try {
-    const token = request.cookies.get("token")?.value;
+    const token = request.cookies.get("auth-token")?.value;
 
     if (!token) {
       throw new Error("Invalid token");

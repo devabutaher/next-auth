@@ -1,10 +1,10 @@
 "use client";
 
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
-import { signIn, useSession } from "next-auth/react";
 
 interface FormType {
   email: string;
@@ -28,6 +28,7 @@ const Login = () => {
 
   const handleAuth = async (data: FormType) => {
     const { email, password } = data;
+
     // const res = await fetch("http://localhost:5000/api/users/login", {
     //   method: "POST",
     //   credentials: "include",
@@ -35,16 +36,20 @@ const Login = () => {
     //   headers: { "Content-Type": "application/json" },
     // });
 
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
 
-    if (res?.ok) {
-      if (from) {
-        replace(`${from}`);
+      if (res?.ok) {
+        if (from) {
+          replace(`${from}`);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 

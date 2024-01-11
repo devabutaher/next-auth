@@ -23,17 +23,26 @@ const Register = () => {
   } = useForm<FormType>();
 
   const handleAuth = async (data: FormType) => {
-    const res = await fetch("http://localhost:5000/api/users/register", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    });
+    const userData = {
+      ...data,
+      role: "user",
+    };
 
-    if (res.ok && from) {
-      if (from) {
-        replace(`${from}`);
+    try {
+      const res = await fetch("http://localhost:5000/api/users/register", {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(userData),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (res.ok && from) {
+        if (from) {
+          replace(`${from}`);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
 

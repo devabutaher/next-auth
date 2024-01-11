@@ -1,6 +1,8 @@
+import jwt from "jsonwebtoken";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
+import { cookies } from "next/headers";
 
 const options: NextAuthOptions = {
   providers: [
@@ -24,13 +26,31 @@ const options: NextAuthOptions = {
 
         const res = await fetch("http://localhost:5000/api/users/login", {
           method: "POST",
-          credentials: "include",
           body: JSON.stringify(userData),
           headers: { "Content-Type": "application/json" },
         });
+
         const user = await res.json();
 
         if (res.ok && user) {
+          const token = jwt.sign(
+            { _id: user._id, email: user.email, role: user.role },
+            process.env.JWT_SECRET as string,
+            {
+              expiresIn: "3d",
+            }
+          );
+
+          cookies().set({
+            name: "auth-token",
+            value: token,
+            httpOnly: true,
+            path: "/",
+            sameSite: "strict",
+            maxAge: 3 * 24 * 60 * 60 * 1000,
+            secure: process.env.NODE_ENV === "production",
+          });
+
           return user;
         }
 
