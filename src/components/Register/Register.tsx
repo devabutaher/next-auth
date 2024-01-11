@@ -25,6 +25,7 @@ const Register = () => {
   const handleAuth = async (data: FormType) => {
     const res = await fetch("http://localhost:5000/api/users/register", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
     });

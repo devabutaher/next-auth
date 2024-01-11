@@ -1,11 +1,10 @@
-import { getServerSession } from "next-auth";
+"use client";
+
 import { SessionProvider } from "next-auth/react";
 import { PropsWithChildren } from "react";
 
-const AuthProvider = async ({ children }: PropsWithChildren) => {
-  const session = await getServerSession();
-
-  return <SessionProvider session={session}>{children}</SessionProvider>;
+const AuthProvider = ({ children }: PropsWithChildren) => {
+  return <SessionProvider>{children}</SessionProvider>;
 };
 
 export default AuthProvider;

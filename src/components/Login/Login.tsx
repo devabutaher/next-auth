@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
+import { signIn, useSession } from "next-auth/react";
 
 interface FormType {
   email: string;
@@ -15,6 +16,10 @@ const Login = () => {
   const from = searchParams.get("redirectURL");
   const { replace } = useRouter();
 
+  const { data: session, status: sessionStatus } = useSession();
+  console.log("session:", session);
+  console.log("sessionStatus:", sessionStatus);
+
   const {
     handleSubmit,
     register,
@@ -22,14 +27,21 @@ const Login = () => {
   } = useForm<FormType>();
 
   const handleAuth = async (data: FormType) => {
-    const res = await fetch("http://localhost:5000/api/users/login", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
+    const { email, password } = data;
+    // const res = await fetch("http://localhost:5000/api/users/login", {
+    //   method: "POST",
+    //   credentials: "include",
+    //   body: JSON.stringify(data),
+    //   headers: { "Content-Type": "application/json" },
+    // });
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
     });
 
-    if (res.ok) {
+    if (res?.ok) {
       if (from) {
         replace(`${from}`);
       }
