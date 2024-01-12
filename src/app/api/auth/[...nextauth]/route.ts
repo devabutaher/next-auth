@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import NextAuth, { Account, NextAuthOptions, User } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider, { GithubProfile } from "next-auth/providers/github";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
@@ -124,15 +124,15 @@ const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ account, profile }: any) {
       if (account?.provider == "credentials") {
         return true;
       }
       if (account?.provider == "google") {
         const userData = {
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
+          name: profile?.name,
+          email: profile?.email,
+          image: profile?.picture,
           role: "user",
         };
 
